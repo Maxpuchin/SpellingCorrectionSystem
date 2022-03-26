@@ -8,7 +8,9 @@ import StudentPage from './pages/StudentPage';
 import StudentProfileSettings from './pages/StudentProfileSettings';
 import TeacherProfileSettings from './pages/TeacherProfileSettings';
 import TeacherListWorks from './pages/TeacherListWorks';
-import TeacherAddNewGroup from './pages/TeacherAddNewGroup';
+import TeacherGroups from './pages/TeacherGroups';
+import EssayPage from './pages/EssayPage';
+import StudentListWorks from './pages/StudentListWorks';
 
 const Router = (props) => {
   let routes = useRoutes([
@@ -20,7 +22,9 @@ const Router = (props) => {
     { path: "/teacher", element: <TeacherPage/> },
     { path: "/teacher/add-new-work", element: <TeacherAddNewWork/> },
     { path: "/teacher/list-works", element: <TeacherListWorks/> },
-    { path: "/teacher/add-new-group", element: <TeacherAddNewGroup/>}
+    { path: "/teacher/groups", element: <TeacherGroups/>},
+    { path: "/student/list-works", element: <StudentListWorks/> },
+    { path: "/student/essay/:name", element:<EssayPage/> }
   ]);
   return routes
 }

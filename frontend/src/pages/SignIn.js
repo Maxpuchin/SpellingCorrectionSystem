@@ -16,17 +16,6 @@ import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import Alert from '@mui/material/Alert';
 
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      <Link color="inherit">
-        Система автоматического исправления опечаток
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
 
 const theme = createTheme();
 
@@ -114,7 +103,7 @@ export default function SignIn() {
             </Grid>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
+        
       </Container>
     </ThemeProvider>
   );

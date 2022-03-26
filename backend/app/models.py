@@ -57,6 +57,19 @@ class Student2GroupAssociation(db.Model):
         primary_key=True
     )
 
+class Work2GroupAssociation(db.Model):
+    __tablename__ = "work2groupassociation"
+    work_id = db.Column(
+        db.Integer,
+        db.ForeignKey("works.work_id"),
+        primary_key=True
+    )
+
+    group_id = db.Column(
+        db.Integer,
+        db.ForeignKey("groups.group_id"),
+        primary_key=True
+    )
 
 class Student(db.Model):
     __tablename__ = 'students'
@@ -94,8 +107,6 @@ class Student(db.Model):
         unique=False    
     )
 
-
-    
 
     groups = db.relationship("Group", secondary="student2groupassociation")
     work_cases = db.relationship("WorkCase")
@@ -157,7 +168,7 @@ class Work(db.Model):
     )
 
     work_cases = db.relationship("WorkCase")
-
+    groups = db.relationship("Group", secondary="work2groupassociation")
 
 class Group(db.Model):
     __tablename__ = "groups"
@@ -180,7 +191,7 @@ class Group(db.Model):
     )
 
     students = db.relationship("Student", secondary="student2groupassociation")
-
+    works = db.relationship("Work", secondary="work2groupassociation")
 
 
 

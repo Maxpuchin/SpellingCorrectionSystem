@@ -1,30 +1,25 @@
-import { Container, Box, Typography, Card } from "@mui/material";
+import { Container, Paper, Typography } from "@mui/material";
 import TeacherAddNewWorkStepper from "../components/TeacherAddNewWorkStepper";
 import TeacherLeftBar from "../components/TeacherLeftBar";
 import React from "react";
 
 export default function TeacherAddNewWork() {
     return (
-        <div>
-        <TeacherLeftBar/>
-        <Container component="main" maxWidth="md">
-            <Card
-                variant="outlined"
-                sx={{
-                    marginTop: 8,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                }}
-            >
-                <div style={{margin: "24px"}}>
-                    <Typography component="h1" variant="h5">
-                        Создать новую работу
-                    </Typography>
-                    <TeacherAddNewWorkStepper/>
-                </div>
-            </Card>
-        </Container>
-        </div>
+        <>
+            <TeacherLeftBar/>
+            <Container component="main" maxWidth="lg" sx={{ mb: 4 }}>
+                <Paper
+                    variant="outlined"
+                    sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
+                >
+                    <div style={{margin: "24px"}}>
+                        <Typography style={{textAlign: "center"}} component="h1" variant="h5">
+                                Создать новую работу
+                        </Typography>
+                        <TeacherAddNewWorkStepper/>
+                    </div>
+                    </Paper>
+            </Container>
+        </>
     )
 }

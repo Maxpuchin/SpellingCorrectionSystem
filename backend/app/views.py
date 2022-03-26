@@ -53,7 +53,17 @@ def add_new_work():
 def list_works():
     return render_template('index.html')
 
-@views.route("/teacher/add-new-group")
+@views.route("/student/list-works")
+@only_for_students
+def list_works_student():
+    return render_template('index.html')
+
+@views.route("/teacher/groups")
 @only_for_teachers
 def add_new_group():
+    return render_template("index.html")
+
+@views.route("/student/essay/<name>")
+@only_for_students
+def essay_page(name):
     return render_template("index.html")

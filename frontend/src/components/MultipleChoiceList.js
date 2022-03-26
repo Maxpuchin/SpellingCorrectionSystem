@@ -30,13 +30,12 @@ function getStyles(name, personName, theme) {
 
 export default function MultipleChoiceList(props) {
   const theme = useTheme();
-  const [personName, setPersonName] = React.useState([]);
-
+  
   const handleChange = (event) => {
     const {
       target: { value },
     } = event;
-    setPersonName(
+    props.setPersonName(
       // On autofill we get a stringified value.
       typeof value === 'string' ? value.split(',') : value,
     );
@@ -44,13 +43,13 @@ export default function MultipleChoiceList(props) {
 
   return (
     <div>
-      <FormControl sx={{ m: 1, width: 400 }}>
+      <FormControl sx={{ m: 1, width: "400px" }}>
         <InputLabel id="demo-multiple-chip-label">Члены группы</InputLabel>
         <Select
           labelId="demo-multiple-chip-label"
           id="demo-multiple-chip"
           multiple
-          value={personName}
+          value={props.personName}
           onChange={handleChange}
           input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
           renderValue={(selected) => (
@@ -66,7 +65,7 @@ export default function MultipleChoiceList(props) {
             <MenuItem
               key={name}
               value={name}
-              style={getStyles(name, personName, theme)}
+              style={getStyles(name, props.personName, theme)}
             >
               {name}
             </MenuItem>

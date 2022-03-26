@@ -27,11 +27,11 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Мои работы" />
     </ListItemButton>
-    <ListItemButton component={Link} to="/teacher/add-new-group">
+    <ListItemButton component={Link} to="/teacher/groups">
       <ListItemIcon>
         <PeopleIcon />
       </ListItemIcon>
-      <ListItemText primary="Добавить новую группу" />
+      <ListItemText primary="Группы" />
     </ListItemButton>
   </React.Fragment>
 );

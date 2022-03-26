@@ -1,13 +1,18 @@
+import collections
+from tokenize import group
 from flask import Blueprint, render_template, request, session, redirect, url_for
 from .main import db, app
-from .models import Work, Teacher
+from .models import Group, Student, Work, Teacher
 from eyed3 import load as mp3_load
 from .decorators import only_for_teachers, only_for_students
+from .corrector import Corrector
 
 import uuid
 import os
 
 work = Blueprint('work', __name__)
+
+corrector = Corrector(app.config["PATH_TO_CORRECTOR"])
 
 ALLOWED_EXTENSIONS = ["mp3"]
 
@@ -23,8 +28,13 @@ def add_new_work():
     try:
         work_name = data["workName"]
         work_type = data["workType"]
+        selected_groups = data.getlist("groupsSelected[]")
     except:
         return {"status": "Проверьте корректность введенных данных!"}, 200
+
+    matched_groups = db.session.query(Group) \
+        .filter(Group.group_name.in_(selected_groups)) \
+        .all()
 
     if work_type == "Диктант":
         file_path = ""
@@ -55,7 +65,8 @@ def add_new_work():
             is_essay=False,
             work_name=work_name,
             dictation_text = dict_text,
-            dictation_file_name=file_path
+            dictation_file_name=file_path,
+            groups=matched_groups
         )
 
         db.session.add(new_work)
@@ -70,7 +81,8 @@ def add_new_work():
             teacher_id=session["user_id"],
             is_essay=True,
             work_name=work_name,
-            essay_topic=essay_topic
+            essay_topic=essay_topic,
+            groups=matched_groups
         )
         
         db.session.add(new_work)
@@ -96,7 +108,43 @@ def get_works():
 
         works.append(work_data)
         
-
-
     return { "status": "OK", "works": works }, 200
 
+@work.route("/get-student-works")
+@only_for_students
+def get_student_works():
+    student = \
+        db.session.query(Student) \
+        .filter(Student.login == session["user_login"]) \
+        .all()[0]
+    
+    works = collections.defaultdict(list)
+
+    for group in student.groups:
+        for work in group.works:
+            work_data = dict()
+            work_data["name"] = work.work_name
+            work_data["type"] = "Сочинение" if work.is_essay == True else "Диктант"
+            work_data["time"] = work.creation_time
+
+            works[group.group_name].append(work_data)
+        
+    return { "status": "OK", "works": works }, 200
+
+@work.route("/get-essay-info/<name>")
+@only_for_students
+def get_essay_info(name):
+    matched_essay = db.session.query(Work) \
+        .filter(Work.work_name == name and Work.is_essay == True) \
+        .all()[0]
+
+    return {"status": "OK", "topic": matched_essay.essay_topic}, 200
+
+@work.route("/correct-text", methods=["POST"])
+@only_for_students
+def correct_text():
+    text = request.json["text"]
+    print(text)
+    corrected = corrector.get_difference_and_candidates(text)
+    print(corrected)
+    return {"corrected": corrected}, 200

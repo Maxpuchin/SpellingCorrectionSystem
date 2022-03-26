@@ -3,6 +3,18 @@ import React, { useEffect } from "react";
 import { AppBar, Toolbar, Typography } from '@mui/material';
 import Router from "./Routes";
 
+// function Copyright(props) {
+//   return (
+//     <Typography variant="body2" color="text.secondary" align="center" {...props}>
+//       <Link color="inherit">
+//         Система автоматического исправления опечаток
+//       </Link>{' '}
+//       {new Date().getFullYear()}
+//       {'.'}
+//     </Typography>
+//   );
+// }
+
 
 function App() {
   return (
@@ -20,6 +32,7 @@ function App() {
           </Toolbar>
         </AppBar>
         <Router/>
+        {/* <Copyright sx={{ mt: 8, mb: 4 }} /> */}
     </BrowserRouter>
 
   );
