@@ -3,7 +3,7 @@ import TeacherAddNewWorkStepper from "../components/TeacherAddNewWorkStepper";
 import TeacherLeftBar from "../components/TeacherLeftBar";
 import React from "react";
 
-export default function TeacherAddNewWork() {
+export default function TeacherAddNewWork(props) {
     return (
         <>
             <TeacherLeftBar/>
@@ -16,7 +16,7 @@ export default function TeacherAddNewWork() {
                         <Typography style={{textAlign: "center"}} component="h1" variant="h5">
                                 Создать новую работу
                         </Typography>
-                        <TeacherAddNewWorkStepper/>
+                        <TeacherAddNewWorkStepper setStatus={props.setStatus}/>
                     </div>
                     </Paper>
             </Container>

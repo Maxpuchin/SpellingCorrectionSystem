@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import TeacherLeftBar from "../components/TeacherLeftBar";
-import { Container, Box, List, ListItem, ListItemIcon, ListItemText, ListItemButton, ListSubheader, Collapse, Card } from "@mui/material";
+import { Container, Box, List, ListItemIcon, ListItemText, ListItemButton, ListSubheader, Collapse, Card } from "@mui/material";
 import axios from "axios";
 import { useEffect } from "react";
+import { Link } from "react-router-dom";
 
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import TextSnippetIcon from '@mui/icons-material/TextSnippet';
@@ -67,7 +68,7 @@ export default function TeacherListWorks() {
                             <List component="div" disablePadding>
                                 {listOfWorks.filter((x) => x.type === "Диктант").map((work) => {
                                     return (
-                                        <ListItemButton sx={{ pl: 4 }}>
+                                        <ListItemButton component={Link} to={"/teacher/list-works/list-cases?name=" + work.name} sx={{ pl: 4 }}>
                                             <ListItemIcon>
                                             <TextSnippetIcon />
                                             </ListItemIcon>
@@ -88,7 +89,7 @@ export default function TeacherListWorks() {
                             <List component="div" disablePadding>
                                 {listOfWorks.filter((x) => x.type === "Сочинение").map((work) => {
                                     return (
-                                        <ListItemButton sx={{ pl: 4 }}>
+                                        <ListItemButton component={Link} to={"/teacher/list-works/list-cases?name=" + work.name} sx={{ pl: 4 }}>
                                             <ListItemIcon>
                                                 <TextSnippetIcon />
                                             </ListItemIcon>

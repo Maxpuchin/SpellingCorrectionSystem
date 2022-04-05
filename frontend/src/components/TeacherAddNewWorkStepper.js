@@ -11,8 +11,9 @@ import Typography from '@mui/material/Typography';
 import { FormControl, Select, InputLabel, MenuItem, TextField } from '@mui/material';
 import axios from 'axios';
 import MultipleChoiceList from './MultipleChoiceList';
+import { useNavigate } from 'react-router-dom';
 
-export default function TeacherAddNewWorkStepper() {
+export default function TeacherAddNewWorkStepper(props) {
   const [activeStep, setActiveStep] = React.useState(0);
   const [workType, setWorkType] = React.useState("Сочинение");
   const [workName, setWorkName] = React.useState("");
@@ -21,6 +22,7 @@ export default function TeacherAddNewWorkStepper() {
   const [taskAudio, setTaskAudio] = React.useState(0);
   const [groupsSelected, setGroupsSelected] = React.useState([]);
   const [groups, setGroups] = React.useState([]);
+  const navigate = useNavigate();
 
   const handleType = (event) => {
     setWorkType(event.target.value);
@@ -63,7 +65,6 @@ export default function TeacherAddNewWorkStepper() {
             groupNames.push(item["group_name"]);
           }
         )
-        
         setGroups(groupNames);
     });
   }
@@ -90,7 +91,13 @@ export default function TeacherAddNewWorkStepper() {
     axios.post(
       "/work/add-new-work",
       formData
-    );
+    ).then((response) => {
+      if (response.data.status === "OK" ) { 
+        navigate("/teacher/list-works")
+      } else {
+        props.setStatus(response.data.status);
+      }
+    });
   }
 
   React.useEffect(() => {
@@ -107,7 +114,8 @@ export default function TeacherAddNewWorkStepper() {
               </Typography>
               <Grid container spacing={3}>
                 <Grid item xs={12} md={6}>
-                  <TextField 
+                  <TextField
+                    fullWidth
                     label="Название работы" 
                     variant="standard"
                     onChange={handleName}
@@ -182,7 +190,8 @@ export default function TeacherAddNewWorkStepper() {
                   id="filled-multiline-static"
                   label="Тема сочинения"
                   multiline
-                  rows={2}
+                  rows={5}
+                  fullWidth
                   variant="filled"
                   value={taskTopic}
                   onChange={handleTaskTopic}
@@ -222,8 +231,9 @@ export default function TeacherAddNewWorkStepper() {
                   id="filled-multiline-static"
                   label="Текст диктанта"
                   multiline
-                  rows={2}
+                  rows={5}
                   variant="filled"
+                  fullWidth
                   value={taskText}
                   onChange={handleTaskText}
                 />

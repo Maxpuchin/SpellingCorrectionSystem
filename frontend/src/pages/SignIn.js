@@ -77,6 +77,7 @@ export default function SignIn() {
               margin="normal"
               required
               fullWidth
+              type="password"
               name="password"
               label="Пароль"
             />

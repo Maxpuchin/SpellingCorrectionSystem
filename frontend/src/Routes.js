@@ -11,6 +11,10 @@ import TeacherListWorks from './pages/TeacherListWorks';
 import TeacherGroups from './pages/TeacherGroups';
 import EssayPage from './pages/EssayPage';
 import StudentListWorks from './pages/StudentListWorks';
+import TeacherCases from './pages/TeacherCases';
+import TeacherMark from './pages/TeacherMark';
+import StudentWorkPage from './pages/StudentWorkPage';
+import StudentResultPage from './pages/StudentResultPage';
 
 const Router = (props) => {
   let routes = useRoutes([
@@ -20,11 +24,14 @@ const Router = (props) => {
     { path: "/teacher/settings", element: <TeacherProfileSettings/> },
     { path: "/sign-in", element: <SignIn/> },
     { path: "/teacher", element: <TeacherPage/> },
-    { path: "/teacher/add-new-work", element: <TeacherAddNewWork/> },
+    { path: "/teacher/add-new-work", element: <TeacherAddNewWork setStatus={props.setStatus}/> },
     { path: "/teacher/list-works", element: <TeacherListWorks/> },
     { path: "/teacher/groups", element: <TeacherGroups/>},
     { path: "/student/list-works", element: <StudentListWorks/> },
-    { path: "/student/essay/:name", element:<EssayPage/> }
+    { path: "/student/list-works/participate", element:<StudentWorkPage/> },
+    { path: "/teacher/list-works/list-cases", element: <TeacherCases/> },
+    { path: "/teacher/list-works/case", element: <TeacherMark/> },
+    { path: "/student/list-works/results", element: <StudentResultPage/> }
   ]);
   return routes
 }

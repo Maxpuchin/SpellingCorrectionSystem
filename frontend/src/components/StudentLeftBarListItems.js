@@ -19,13 +19,7 @@ export const mainListItems = (
       <ListItemIcon>
         <FormatListBulleted/>
       </ListItemIcon>
-      <ListItemText primary="Мои работы" />
-    </ListItemButton>
-    <ListItemButton>
-      <ListItemIcon>
-        <PeopleIcon />
-      </ListItemIcon>
-      <ListItemText primary="Мои группы" />
+      <ListItemText primary="Общее" />
     </ListItemButton>
   </React.Fragment>
 );

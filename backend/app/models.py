@@ -38,7 +38,6 @@ class Teacher(db.Model):
         unique=False    
     )
 
-    work_cases = db.relationship("WorkCase")
     groups_created = db.relationship("Group")
     works_created = db.relationship("Work")
 
@@ -167,6 +166,11 @@ class Work(db.Model):
         unique=True
     )
 
+    minutes_to_finish = db.Column(
+        db.Integer,
+        default=45
+    )
+
     work_cases = db.relationship("WorkCase")
     groups = db.relationship("Group", secondary="work2groupassociation")
 
@@ -205,22 +209,17 @@ class WorkCase(db.Model):
 
     start_time = db.Column(
         db.DateTime,
-        default=datetime.datetime.utcnow
+       #  default=datetime.datetime.utcnow
     )
 
     end_time = db.Column(
         db.DateTime,
-        default=datetime.datetime.utcnow
+        # default=datetime.datetime.utcnow
     )
 
     student_id = db.Column(
         db.Integer,
         db.ForeignKey("students.student_id")
-    )
-
-    teacher_id = db.Column(
-        db.Integer,
-        db.ForeignKey("teachers.teacher_id")
     )
 
     work_id = db.Column(
@@ -243,9 +242,40 @@ class WorkCase(db.Model):
     )
 
     status = db.Column(
-        db.String(10),
+        db.String(30),
         nullable=False,
         unique=False,
         index=True
     )
 
+    # status may be: ["not started", "in process", "auto graded", "teacher graded", "corrected"]
+
+    text_written = db.Column(
+        db.Text,
+        nullable=True,
+        unique=False,
+        index=True
+    )
+
+    auto_corrected_text = db.Column(
+        db.Text,
+        nullable=True,
+        unique=False,
+        index=True
+    )
+
+    teacher_corrected_text = db.Column(
+        db.Text,
+        nullable=True,
+        unique=False,
+        index=True
+    )
+
+    cw_done = db.Column(
+        db.Boolean,
+        default=False,
+        index=True,
+        unique=False
+    )
+
+    

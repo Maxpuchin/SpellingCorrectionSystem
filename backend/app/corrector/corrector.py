@@ -11,38 +11,11 @@ class Corrector:
         self.corrector.LoadLangModel(path_to_corrector)
 
     def __words_to_string(self, words):
-        # res = ""
-        # allowed_punct = [",", ".", "?", "!"]
-
-        # if len(words) == 0:
-        #     return ""
-
-        # if len(words) == 1:
-        #     if words[0] not in allowed_punct:
-        #         return words[0] + " "
-        #     else:
-        #         return words[0]
-        
-
-        # for word_index in range(len(words) - 1):
-        #     if words[word_index] in allowed_punct:
-        #         continue
-        #     if words[word_index + 1] in allowed_punct:
-        #         res += words[word_index] + words[word_index + 1]
-        #         continue
-        #     else:
-        #         res += words[word_index] + " "
-
-        # return res if res[-1] in allowed_punct or res[-1] == " " else res + " "
-
         return " ".join(words) + " "
 
-    def get_difference_and_candidates(self, src_text):
-        src_words = word_tokenize(src_text)
-        sent_to_send_to_corrector = re.sub("[^а-яёА-ЯЁ.?!(),-]+", " ", src_text)
-        trg_text = self.corrector.FixFragment(sent_to_send_to_corrector)
+    def get_difference_and_mark(self, src_text, trg_text):
         trg_words = word_tokenize(trg_text)
-
+        src_words = word_tokenize(src_text)
         sm = difflib.SequenceMatcher(None, src_words, trg_words)
 
         matching_blocks = list(sm.get_matching_blocks())
@@ -63,7 +36,7 @@ class Corrector:
                     "before": src_text,
                     "after": trg_text
                 }
-            ]
+            ], 0, trg_text
 
         incorrect_ranges = []
 
@@ -101,12 +74,13 @@ class Corrector:
 
         sequence_to_send = []   
 
+        
         for ((l_src, r_src), (l_trg, r_trg)) in incorrect_ranges:
             sequence_to_send.append((l_src, {
                 "before": self.__words_to_string(src_words[l_src: r_src]),
                 "after": self.__words_to_string(trg_words[l_trg: r_trg])
             }))
-
+            
         for ((l_src, r_src), (l_trg, r_trg)) in correct_ranges:
             for index_src, index_trg in zip(range(l_src, r_src), range(l_trg, r_trg)):
                 sequence_to_send.append(
@@ -116,22 +90,46 @@ class Corrector:
                     })
                 )
 
+        correct_symbols = 0
+        overall_symbols = 0
+
+        for block in sequence_to_send:
+            correct_len = len(block[1]["after"])
+            if block[1]["before"] == block[1]["after"]:
+                correct_symbols += correct_len
+            overall_symbols += correct_len
 
         response = []
         
         for (_, dct) in sorted(sequence_to_send):
             response.append(dct)
 
-        return response
+        if correct_symbols == 0:
+            return response, 0
+        if overall_symbols == 0:
+            return response, 100
+        
+        mark = int(100 * correct_symbols / overall_symbols)
+        
+        return response, mark, trg_text
 
-# corrector = Corrector()
+
+    def correct_and_get_difference(self, src_text):
+        trg_text = self.corrector.FixFragment(
+            re.sub("[^а-яёА-ЯЁ.?!(),-]+", " ", src_text)
+        )
+
+        return self.get_difference_and_mark(src_text, trg_text)
+        
+        
+# corrector = Corrector("./data/model_ru_1M.bin")
 
 # test_sentence = 'assd Как быть с праблемой любови в рамане sads Льва Толстово? Чтонибудь про дабро?'
 # test_sentence1 = "Рассия"
 # test_sentence2 = ""
 # test_sentence3 = "Роман"
 
-# print(corrector.get_difference_and_candidates(test_sentence))
-# print(corrector.get_difference_and_candidates(test_sentence1))
-# print(corrector.get_difference_and_candidates(test_sentence2))
-# print(corrector.get_difference_and_candidates(test_sentence3))
+# print(corrector.correct_and_get_difference(test_sentence))
+# print(corrector.correct_and_get_difference(test_sentence1))
+# print(corrector.correct_and_get_difference(test_sentence2))
+# print(corrector.correct_and_get_difference(test_sentence3))

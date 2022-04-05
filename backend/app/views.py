@@ -58,12 +58,32 @@ def list_works():
 def list_works_student():
     return render_template('index.html')
 
+@views.route("/teacher/list-works/stats")
+@only_for_teachers
+def show_cases():
+    return render_template('index.html')
+
+@views.route("/teacher/list-works/list-cases")
+@only_for_teachers
+def show_case__():
+    return render_template('index.html')
+
+@views.route("/teacher/list-works/case")
+@only_for_teachers
+def show_case():
+    return render_template('index.html')
+
 @views.route("/teacher/groups")
 @only_for_teachers
 def add_new_group():
     return render_template("index.html")
 
-@views.route("/student/essay/<name>")
+@views.route("/student/list-works/participate")
 @only_for_students
-def essay_page(name):
+def essay_page():
+    return render_template("index.html")
+
+@views.route("/student/list-works/results")
+@only_for_students
+def results_page():
     return render_template("index.html")

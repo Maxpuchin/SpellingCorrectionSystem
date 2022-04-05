@@ -26,3 +26,12 @@ def only_for_teachers(func):
                 return func(*args, **kwargs)
 
     return wrapper_teacher
+
+def only_for_logged(func):
+    def wrapper_logged(*args, **kwargs):
+        if "user_type" not in session:
+            return redirect(url_for("views.sign_in"))
+        else:
+            return func(*args, **kwargs)
+
+    return wrapper_logged

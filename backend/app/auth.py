@@ -54,6 +54,7 @@ def sign_up():
     
         return {"status": "OK"}, 200
     except Exception as e:
+        print(e)
         return {"status": "Проверьте корректность введенных данных!"}, 200
 
 @auth.route("/sign-in", methods=["POST"])
