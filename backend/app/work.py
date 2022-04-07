@@ -108,16 +108,58 @@ def add_new_work():
 def get_works():
     teacher = get_teacher_by_id(session["user_id"])
     works = []
+    work_cases = []
+
+    group_names = []
 
     for work in teacher.works_created:
         work_data = dict()
         work_data["name"] = work.work_name
         work_data["type"] = "Сочинение" if work.is_essay == True else "Диктант"
         work_data["time"] = work.creation_time
+        work_data["cases"] = len(work.work_cases)
+        g_names = [group.group_name for group in work.groups]
+        work_data["groups"] = g_names
+
+        group_names.extend(g_names)
+
+        for work_case in work.work_cases:
+            severity = "info"
+            text = ""
+
+            if work_case.status == "auto graded":
+                severity = "error"
+                text = "Работа завершена. Требуется оценка преподавателя."
+            elif work_case.status == "in process":
+                severity = "warning"
+                text = "Ученик в процессе написания работы."
+            else:
+                severity = "success"
+                text = "Работа успешно оценена. Дополнительных действий не требуется."
+                
+            student = get_student_by_id(work_case.student_id)
+
+            work_cases.append(
+                {
+                    "severity": severity,
+                    "full_name": student.login + " (" + student.first_name + " " + student.last_name + ")",
+                    "text": text,
+                    "work_name": work.work_name,
+                    "type": "Сочинение" if work.is_essay else "Диктант",
+                    "start_time": str(work_case.start_time),
+                    "work_case_id": work_case.work_case_id,
+                    "auto grade": work_case.auto_grade,
+                    "teacher grade": work_case.teacher_grade
+                }
+            )
 
         works.append(work_data)
         
-    return { "status": "OK", "works": works }, 200
+    group_names = list(set(group_names))
+
+    work_cases.sort(key=lambda x: x["start_time"], reverse=True)
+
+    return { "status": "OK", "works": works, "last_cases": work_cases[:5], "group_names": group_names }, 200
 
 @work.route("/get-student-works")
 @only_for_students
@@ -399,7 +441,9 @@ def get_cases():
                         "full_name": student.login + " (" + student.first_name + " " + student.last_name + ")",
                         "text": text,
                         "start_time": str(work_case.start_time),
-                        "work_case_id": work_case.work_case_id
+                        "work_case_id": work_case.work_case_id,
+                        "teacher_grade": work_case.teacher_grade,
+                        "auto_grade": work_case.auto_grade
                     }
                 )
 
@@ -426,5 +470,5 @@ def set_corrections():
     work_case_id = request.args.get("workCaseId")
     work_case = get_work_case_by_id(work_case_id)
     work_case.cw_done = True
-
+    db.session.commit()
     return {}, 200

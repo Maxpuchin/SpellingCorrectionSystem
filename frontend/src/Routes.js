@@ -15,6 +15,7 @@ import TeacherCases from './pages/TeacherCases';
 import TeacherMark from './pages/TeacherMark';
 import StudentWorkPage from './pages/StudentWorkPage';
 import StudentResultPage from './pages/StudentResultPage';
+import TeacherListWorks2 from './pages/TeacherListWorks2';
 
 const Router = (props) => {
   let routes = useRoutes([
@@ -25,7 +26,7 @@ const Router = (props) => {
     { path: "/sign-in", element: <SignIn/> },
     { path: "/teacher", element: <TeacherPage/> },
     { path: "/teacher/add-new-work", element: <TeacherAddNewWork setStatus={props.setStatus}/> },
-    { path: "/teacher/list-works", element: <TeacherListWorks/> },
+    { path: "/teacher/list-works", element: <TeacherListWorks2/> },
     { path: "/teacher/groups", element: <TeacherGroups/>},
     { path: "/student/list-works", element: <StudentListWorks/> },
     { path: "/student/list-works/participate", element:<StudentWorkPage/> },

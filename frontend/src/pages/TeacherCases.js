@@ -1,13 +1,9 @@
 import React, { useState } from "react";
 import TeacherLeftBar from "../components/TeacherLeftBar";
-import { Container, Box, List, Typography, Button, Accordion, Alert, AccordionSummary, Card, AlertTitle } from "@mui/material";
+import { Container, Box, List, Typography, Button, Accordion, Alert, AccordionSummary, Card, AlertTitle, Grid, CardContent } from "@mui/material";
 import axios from "axios";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
-import TextSnippetIcon from '@mui/icons-material/TextSnippet';
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
 
 export default function TeacherCases() {
 
@@ -28,7 +24,27 @@ export default function TeacherCases() {
     return (
         <>
             <TeacherLeftBar/>
-            <Container component="main" maxWidth="md">
+            <Container maxWidth="lg" sx={{mt: "24px", mb: "24px"}}>
+            <Grid container spacing={3}>
+                <Grid item xs={12} md={12} lg={12}>
+                    <Card variant="outlined">
+                        <CardContent>
+                        <Typography variant="h5" component="div">
+                            Что происходит на этой странице?
+                        </Typography>
+                        <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                            Кратко
+                        </Typography>
+                        <Typography variant="body2">
+                            Здесь вы можете выбрать выполненную учеником работу
+                            для ручной оценки. <br /> 
+                            Для этого выберите еще не оцененную
+                            работу из предложенных ниже и нажмите кнопку <b>Оценить</b>.
+                        </Typography>
+                        </CardContent>
+                    </Card>
+                </Grid>
+                <Grid item xs={12} md={12} lg={12}>
                 <List>
                     {cases.map((caseInfo) => {
                         console.log(caseInfo)
@@ -45,15 +61,18 @@ export default function TeacherCases() {
                                   }    
                             >
                                 <AlertTitle>
-                                        <b>Ученик: </b> {caseInfo.full_name}
+                                    <b>Ученик: </b> {caseInfo.full_name}
                                 </AlertTitle>
                                 <b>Начало: </b> {caseInfo.start_time} <br/>
-                                <b>Статус: </b> {caseInfo.text}
-                                   
+                                <b>Статус: </b> {caseInfo.text} <br />
+                                <b>Автоматическая оценка: </b> {caseInfo.auto_grade} <br />
+                                <b>Ваша оценка: </b> {caseInfo.teacher_grade} <br />
                             </Alert>
                         )
                     })}
-                </List>             
+                </List>
+                </Grid>
+            </Grid>             
             </Container>
         </>
     )

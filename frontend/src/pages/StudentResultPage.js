@@ -1,4 +1,4 @@
-import { Card, Chip, Container, Divider, Paper, Stack, Typography, TextField, Button } from "@mui/material";
+import { Card, Chip, Container, Divider, Paper, Stack, Typography, TextField, Button, Alert, AlertTitle } from "@mui/material";
 import { Box } from "@mui/system";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -39,6 +39,19 @@ export default function StudentResultPage() {
         });
     }, []);
     
+    const handleSubmit = () => {
+        axios.get(
+            "/work/set-correction-work",
+            {
+                params: {
+                    "workCaseId": workCaseId 
+                }
+            }
+        ).then((response) => {
+            window.location.reload();
+        })
+    }
+
     return (
         <div>
             <StudentLeftBar/>
@@ -78,9 +91,12 @@ export default function StudentResultPage() {
                 {
                     cwDone === true 
                     ?
-                        <Typography>
-                            Вы уже сделали работу над ошибками
-                        </Typography>
+                        <Alert severity="success" sx={{mt: "12px"}} >
+                            <AlertTitle>
+                                Работа над ошибками
+                            </AlertTitle>
+                            Завершено.
+                        </Alert>
                     :
                     <>
                         <Divider sx={{mb: "12px", mt: "12px"}}>
@@ -100,6 +116,7 @@ export default function StudentResultPage() {
                             }}
                             color="success" 
                             variant="outlined"
+                            onClick={handleSubmit}
                         >
                             Закончить работу над ошибками
                         </Button>

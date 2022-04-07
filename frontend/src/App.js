@@ -1,11 +1,12 @@
 import { BrowserRouter } from "react-router-dom";
 import React, { useEffect } from "react";
-import { AppBar, Toolbar, Alert, Snackbar, Typography, Link } from '@mui/material';
+import { AppBar, Toolbar, Alert, Snackbar, Typography, Link, IconButton } from '@mui/material';
 import Router from "./Routes";
+import { Menu } from "@mui/icons-material";
 
 function Copyright() {
   return (
-    <Typography variant="body2" color="text.secondary" align="center" marginBottom="48px">
+    <Typography variant="body2" color="text.secondary" align="center" marginTop="48px" marginBottom="48px">
       <Link color="inherit">
         Система автоматического исправления опечаток
       </Link>{' '}

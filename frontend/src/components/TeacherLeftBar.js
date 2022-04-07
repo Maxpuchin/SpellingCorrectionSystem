@@ -1,11 +1,46 @@
-import { Drawer, List, Box, Avatar, Typography, Divider } from "@mui/material";
+import { List, Box, Avatar, Typography, Divider, IconButton } from "@mui/material";
 import { mainListItems, secondaryListItems } from "./TeacherLeftBarListItems";
 import React from "react";
 import { useEffect } from "react";
-import axios from "axios";
+import { Menu } from "@mui/icons-material";
+import MuiDrawer from '@mui/material/Drawer';
+import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
+
+const drawerWidth = 280;
+
+const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
+    ({ theme, open }) => ({
+      '& .MuiDrawer-paper': {
+        position: 'absolute',
+        whiteSpace: 'nowrap',
+        width: drawerWidth,
+        transition: theme.transitions.create('width', {
+          easing: theme.transitions.easing.sharp,
+          duration: theme.transitions.duration.enteringScreen,
+        }),
+        boxSizing: 'border-box',
+        ...(!open && {
+          overflowX: 'hidden',
+          transition: theme.transitions.create('width', {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+          }),
+          width: theme.spacing(7),
+          [theme.breakpoints.up('sm')]: {
+            width: theme.spacing(9),
+          },
+        }),
+      },
+    }),
+  );
+
 
 export default function TeacherLeftBar() {
     const [userLogin, setUserLogin] = React.useState(0);
+    const [open, setOpen] = React.useState(false);
+    const toggleDrawer = () => {
+        setOpen(!open);
+    };
 
     useEffect(() => {
       setUserLogin(localStorage.getItem("login"));
@@ -14,12 +49,8 @@ export default function TeacherLeftBar() {
     return ( 
         <Drawer 
           variant="permanent" 
-          open={true} 
-          PaperProps={{
-              sx: {
-              width: 280
-              }
-          }}
+          open={open} 
+          
         >
           <Box
             sx={{
@@ -34,15 +65,18 @@ export default function TeacherLeftBar() {
               borderRadius: 1
             }}
           >
-            
+              <IconButton onClick={toggleDrawer}>
+                    <Menu/>
+              </IconButton>
               <Avatar style={{marginBottom: "12px"}}>{userLogin[0]}</Avatar>
-              <Typography
-                color="neutral.400"
-                variant="body2"
-              >
-                Добро пожаловать, {userLogin}!
-              </Typography>
-            
+              {open && 
+                <Typography
+                  color="neutral.400"
+                  variant="body2"
+                >
+                  Добро пожаловать, {userLogin}!
+                </Typography>
+              }
           </Box>
           <Divider />
           <List component="nav">
